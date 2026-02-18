@@ -100,10 +100,26 @@ html, body, #root {
 }
 
 .home-title {
-  margin: 0 0 clamp(16px, 2.5vw, 28px) 0;
+  margin: 0;
   font-size: clamp(22px, 3vw, 30px);
   font-weight: 700;
   color: #1a202c;
+}
+
+.home-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: clamp(16px, 2.5vw, 28px);
+}
+
+.home-count {
+  font-size: clamp(13px, 1.6vw, 15px);
+  color: #718096;
+  font-weight: 500;
+  background: #e0e7ff;
+  padding: 4px 12px;
+  border-radius: 20px;
 }
 
 .job-list {
@@ -221,4 +237,74 @@ html, body, #root {
   min-height: 100vh;
   font-size: 18px;
   color: #667eea;
+}
+
+/* ---- salary badge ---- */
+.job-salary {
+  font-size: clamp(12px, 1.5vw, 14px);
+  font-weight: 600;
+  color: #667eea;
+  background: #e0e7ff;
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+/* ---- pagination ---- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: clamp(20px, 3vw, 32px);
+  padding-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  min-width: 38px;
+  height: 38px;
+  border: 1.5px solid #e0e7ff;
+  border-radius: 10px;
+  background: #fff;
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 12px;
+  transition: all 0.15s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: #667eea;
+  color: #fff;
+  border-color: #667eea;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.page-active:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.page-dots {
+  color: #a0aec0;
+  font-size: 16px;
+  padding: 0 4px;
+  user-select: none;
+}
+
+.page-info {
+  font-size: 13px;
+  color: #a0aec0;
+  margin-left: 12px;
+  white-space: nowrap;
 }

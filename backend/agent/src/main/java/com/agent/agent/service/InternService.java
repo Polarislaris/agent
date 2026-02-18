@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,38 @@ import com.agent.agent.model.InternPost;
 @Service
 public class InternService {
 
-    // Placeholder: in-memory data (replace with DB later)
+    private static final Logger LOG = Logger.getLogger(InternService.class.getName());
+
+    private final PythonDataClient pythonClient;
+
+    // In-memory data (populated from Python service or placeholder)
     private final Map<String, InternPost> internPosts = new LinkedHashMap<>();
 
-    public InternService() {
-        initPlaceholderData();
+    public InternService(PythonDataClient pythonClient) {
+        this.pythonClient = pythonClient;
+        loadData();
+    }
+
+    /**
+     * 优先从 Python FastAPI 获取数据，失败时 fallback 到本地 placeholder
+     */
+    private void loadData() {
+        List<InternPost> posts = pythonClient.fetchAllInterns();
+        if (!posts.isEmpty()) {
+            LOG.info("Loaded " + posts.size() + " posts from Python service");
+            for (InternPost p : posts) {
+                internPosts.put(p.getId(), p);
+            }
+        } else {
+            LOG.info("Python service unavailable, loading placeholder data");
+            initPlaceholderData();
+        }
+    }
+
+    /** 手动刷新数据（可通过新增 endpoint 调用） */
+    public void refreshData() {
+        internPosts.clear();
+        loadData();
     }
 
     private void initPlaceholderData() {
