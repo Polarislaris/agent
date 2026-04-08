@@ -118,8 +118,8 @@ export default function Home() {
                   <span>{p.date}</span>
                 </div>
                 <div className="job-extra">
-                  {p.fitScore && <span className="job-stars">{p.fitScore}</span>}
-                  {!p.fitScore && <span className="job-stars">★★★★★</span>}
+                  {p.fitScore && <span className="job-stars">{p.fitScore.match(/★[★☆]*/)?.[0] || "★★★★★"}</span>}
+                  {!p.fitScore && <span className="job-stars" style={{opacity: 0.4}}>Pending AI…</span>}
                   {p.avgSalary && <span className="job-salary">{p.avgSalary}</span>}
                   {p.applyLink && p.applyLink !== "#" && (
                     <a

@@ -4,6 +4,9 @@ Port: 8000
 """
 import logging
 
+from dotenv import load_dotenv
+load_dotenv()  # loads Agent_data/.env into os.environ before anything else
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,7 +20,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
-    # CORS (allow Java backend & frontend local dev)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

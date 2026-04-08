@@ -1,7 +1,7 @@
 """
-Pydantic models — matches Java InternPost / CompanyInfo
+Pydantic models — matches Java InternPost / CompanyInfo + DB-oriented models
 """
-from typing import List
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -26,7 +26,7 @@ class InternPost(BaseModel):
     avgSalary: str = Field(..., alias="avgSalary")
 
     model_config = {
-        "populate_by_name": True,       # allow using field names (e.g. applyLink) when creating instances
+        "populate_by_name": True,
         "json_schema_extra": {
             "example": {
                 "id": "1",
@@ -48,3 +48,56 @@ class InternPost(BaseModel):
             }
         }
     }
+
+
+# ─── DB-oriented models for scrape-data endpoint ────────────────────────────
+
+class JobRow(BaseModel):
+    """Matches Supabase 'Jobs' table schema"""
+    job_id: str
+    company: str
+    title: str
+    location: str
+    apply_url: str
+    post_date: str  # YYYY-MM-DD
+
+
+class JobDocumentRow(BaseModel):
+    """Matches Supabase 'job_documents' table schema"""
+    job_id: str
+    fetch_url: str = ""
+    scrape_method: str = ""
+    jd_raw_text: str = ""
+
+
+class ScrapeDataResponse(BaseModel):
+    """Response for /api/v1/scrape-data endpoint"""
+    jobs: List[JobRow]
+    job_documents: List[JobDocumentRow]
+
+
+# ─── Cleaning API models for Java -> Python -> Java flow ───────────────────
+
+class JobDocumentCleanInput(BaseModel):
+    job_id: str
+    jd_raw_text: str = ""
+
+
+class JobDocumentCleanRequest(BaseModel):
+    documents: List[JobDocumentCleanInput]
+    min_length: int = 50
+
+
+class JobDocumentCleanResult(BaseModel):
+    job_id: str
+    jd_clean_text: str = ""
+    jd_clean_hash: str = ""
+    delete_row: bool = False
+    cleaned_length: int = 0
+
+
+class JobDocumentCleanResponse(BaseModel):
+    results: List[JobDocumentCleanResult]
+    total: int
+    keep_count: int
+    delete_count: int

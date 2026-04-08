@@ -6,9 +6,9 @@ import hashlib
 from typing import List
 
 
-def generate_id(title: str, company: str) -> str:
-    """Generate short hash id from title + company"""
-    raw = f"{title.strip().lower()}|{company.strip().lower()}"
+def generate_id(title: str, company: str, location: str = "") -> str:
+    """Generate short hash id from title + company + location"""
+    raw = f"{title.strip().lower()}|{company.strip().lower()}|{location.strip().lower()}"
     return hashlib.md5(raw.encode()).hexdigest()[:8]
 
 
